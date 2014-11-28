@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -73,6 +74,10 @@ public class ClassicGameScreen implements Screen, InputProcessor {
     private Array<btCollisionObject> pipecollisions;
     private Array<btCollisionObject> toppipecollisions;
     Game g;
+    private Sound dieSound;
+    private Sound flopSound;
+    private Sound scoreSound;
+    private int score = 0;
     
     public ClassicGameScreen(Game game){
     	g = game;
@@ -119,8 +124,16 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			pipe.transform.getTranslation(tmp);
 			float x = tmp.x;
 			
+			Vector3 playertmp = new Vector3();
+			playerinstance.transform.getTranslation(playertmp);
+			float playerx = playertmp.x;
+			
 			if(x == 50*blockscale){//middle
 				spawnpipes(pipeinstances, toppipeinstances);
+			}
+			
+			if(x == playerx){//add score
+				addscore();
 			}
 				
 	        if(x >= 60*blockscale){//left side
@@ -185,8 +198,15 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 
 	}
 	
+	private void addscore(){
+		score++;
+		scoreSound.play();
+		Gdx.app.log("score ", ""+score);
+	}
+	
 	private void playerdie(){
 		//play sound and wait
+		dieSound.play();
 		dead = true;
 	}
 
@@ -238,6 +258,11 @@ public class ClassicGameScreen implements Screen, InputProcessor {
         ballObject = new btCollisionObject();
         ballObject.setCollisionShape(ballShape);
         ballObject.setWorldTransform(playerinstance.transform);    
+        
+        //sounds
+        flopSound = Gdx.audio.newSound(Gdx.files.internal("sounds/switch.wav"));
+        dieSound = Gdx.audio.newSound(Gdx.files.internal("sounds/die.wav"));
+        scoreSound = Gdx.audio.newSound(Gdx.files.internal("sounds/point.wav"));
         
 		Gdx.input.setInputProcessor(this);
 	}
@@ -328,6 +353,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			touched=true;
 		if(!dead){
 			playerforce+=100.0f;
+			flopSound.play();
 		}
 		else {
 			g.setScreen(new ClassicGameScreen(g));
@@ -413,6 +439,9 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	    pipeShape.dispose();
 	    dispatcher.dispose();
 	    collisionConfig.dispose();
+	    dieSound.dispose();
+	    flopSound.dispose();
+	    scoreSound.dispose();
 		this.dispose();
 	}
 
