@@ -189,6 +189,11 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			if(collision){
 				playerdie();
 			}
+			Vector3 playertmppos = new Vector3();
+			playerinstance.transform.getTranslation(playertmppos);
+			if(playertmppos.y >= 90){
+				playerdie();
+			}
 		}
 		else if(touched && dead && collision){
 			playerinstance.transform.translate(0, gravity*delta, 0);
