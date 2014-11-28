@@ -42,6 +42,7 @@ import com.badlogic.gdx.physics.bullet.collision.btManifoldResult;
 import com.badlogic.gdx.physics.bullet.collision.btSphereBoxCollisionAlgorithm;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.utils.Array;
+import com.jtechapps.FloppyThreeD.NativeInterface;
 
 public class ClassicGameScreen implements Screen, InputProcessor {
 	public PerspectiveCamera camera;
@@ -78,9 +79,11 @@ public class ClassicGameScreen implements Screen, InputProcessor {
     private Sound flopSound;
     private Sound scoreSound;
     private int score = 0;
+    private NativeInterface nface;
     
-    public ClassicGameScreen(Game game){
+    public ClassicGameScreen(Game game, NativeInterface nativeInterface){
     	g = game;
+    	nface = nativeInterface;
     }
 
 	@Override
@@ -361,7 +364,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			flopSound.play();
 		}
 		else {
-			g.setScreen(new ClassicGameScreen(g));
+			g.setScreen(new ClassicGameScreen(g, nface));
 		}
 	}
 
@@ -447,6 +450,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	    dieSound.dispose();
 	    flopSound.dispose();
 	    scoreSound.dispose();
+	    nface.garbagecollect();
 		this.dispose();
 	}
 

@@ -7,6 +7,7 @@ import com.jtechapps.FloppyThreeD.FloppyGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new FloppyGame(), config);
+		DesktopInterface nface = new DesktopInterface();
+		new LwjglApplication(new FloppyGame(nface), config);
 	}
 }

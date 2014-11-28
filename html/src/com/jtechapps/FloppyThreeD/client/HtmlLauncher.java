@@ -14,6 +14,7 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener getApplicationListener () {
-                return new FloppyGame();
+        		HtmlInterface nface = new HtmlInterface();
+                return new FloppyGame(nface);
         }
 }

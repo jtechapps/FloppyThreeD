@@ -11,7 +11,10 @@ public class IOSLauncher extends IOSApplication.Delegate {
     @Override
     protected IOSApplication createApplication() {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
-        return new IOSApplication(new FloppyGame(), config);
+        IOSInterface nface = new IOSInterface();
+        config.orientationLandscape = true;
+        config.orientationPortrait = false;
+        return new IOSApplication(new FloppyGame(nface), config);
     }
 
     public static void main(String[] argv) {
