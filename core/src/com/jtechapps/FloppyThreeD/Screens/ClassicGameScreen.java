@@ -221,7 +221,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		Bullet.init();
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
-		camera = new PerspectiveCamera(67, width, height);
+		camera = new PerspectiveCamera(67, 640*2, 480*2);
 		camera.position.set(50.0f*blockscale, 25.0f, 0.0f);
 		camera.lookAt(50.0f*blockscale, 25.0f, 50.0f*blockscale);
 		camera.near = 1f;
