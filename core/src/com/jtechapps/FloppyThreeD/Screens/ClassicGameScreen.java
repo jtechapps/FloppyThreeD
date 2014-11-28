@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -80,6 +81,11 @@ public class ClassicGameScreen implements Screen, InputProcessor {
     private Sound scoreSound;
     private int score = 0;
     private NativeInterface nface;
+    private SpriteBatch batch;
+    private Texture backgroundone;
+    private float bgonex = 0;
+    private Texture backgroundtwo;
+    private float bgtwox;//look in show()
     
     public ClassicGameScreen(Game game, NativeInterface nativeInterface){
     	g = game;
@@ -91,9 +97,24 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(),
 				Gdx.graphics.getHeight());
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		//render 2d background
+		batch.begin();
+		batch.draw(backgroundone, bgonex, 0, width, height);
+		batch.draw(backgroundtwo, bgtwox, 0, width, height);
+		if(touched && !dead){
+			bgonex-=1;
+			bgtwox-=1;
+		}
+		if(bgonex<=-width){
+			bgonex = width;
+		}
+		if(bgtwox<=-width){
+			bgtwox = width;
+		}
+		batch.end();
 		modelBatch.begin(camera);
 		for (ModelInstance minstance : instances) {
-			modelBatch.render(minstance, environment);
+			//modelBatch.render(minstance, environment);//ground is now invisible
 		}
 		for (int arrayint = 0; arrayint < pipeinstances.size; arrayint++){
 			if(touched && !dead){
@@ -272,6 +293,12 @@ public class ClassicGameScreen implements Screen, InputProcessor {
         flopSound = Gdx.audio.newSound(Gdx.files.internal("sounds/switch.wav"));
         dieSound = Gdx.audio.newSound(Gdx.files.internal("sounds/die.wav"));
         scoreSound = Gdx.audio.newSound(Gdx.files.internal("sounds/point.wav"));
+        
+        //2d textures
+        batch = new SpriteBatch();
+        backgroundone = new Texture("img/backgroundone.png");
+        backgroundtwo = new Texture("img/backgroundtwo.png");
+        bgtwox = width;
         
 		Gdx.input.setInputProcessor(this);
 	}
@@ -452,6 +479,9 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	    flopSound.dispose();
 	    scoreSound.dispose();
 	    nface.garbagecollect();
+	    backgroundone.dispose();
+	    backgroundtwo.dispose();
+	    batch.dispose();
 		this.dispose();
 	}
 
