@@ -136,7 +136,8 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			}
 			
 			if(x == playerx){//add score
-				addscore();
+				if(!dead)
+					addscore();
 			}
 				
 	        if(x >= 60*blockscale){//left side
