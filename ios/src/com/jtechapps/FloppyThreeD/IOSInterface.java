@@ -1,6 +1,9 @@
 package com.jtechapps.FloppyThreeD;
 
+import com.badlogic.gdx.assets.AssetManager;
+
 public class IOSInterface implements NativeInterface {
+	private AssetManager am = null;
 
 	@Override
 	public void garbagecollect() {
@@ -11,7 +14,18 @@ public class IOSInterface implements NativeInterface {
 
 	@Override
 	public void dispose() {
-		
+		if(am!=null)
+			am.dispose();
+	}
+	
+	@Override
+	public void setAssetManger(AssetManager assetmanager) {
+		am = assetmanager;
+	}
+
+	@Override
+	public AssetManager getAssetManger() {
+		return am;
 	}
 
 }

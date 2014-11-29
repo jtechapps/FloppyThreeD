@@ -1,8 +1,10 @@
 package com.jtechapps.FloppyThreeD.android;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.jtechapps.FloppyThreeD.NativeInterface;
 
 public class AndroidInterface implements NativeInterface {
+	private AssetManager am = null;
 
 	@Override
 	public void garbagecollect() {
@@ -13,7 +15,18 @@ public class AndroidInterface implements NativeInterface {
 
 	@Override
 	public void dispose() {
-		
+		if(am!=null)
+			am.dispose();
+	}
+
+	@Override
+	public void setAssetManger(AssetManager assetmanager) {
+		am = assetmanager;
+	}
+
+	@Override
+	public AssetManager getAssetManger() {
+		return am;
 	}
 
 }

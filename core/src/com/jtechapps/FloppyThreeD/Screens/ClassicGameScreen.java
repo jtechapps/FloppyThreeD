@@ -60,11 +60,9 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	private Array<ModelInstance> pipeinstances;
 	private Array<ModelInstance> toppipeinstances;
 	private Environment environment;
-	private CameraInputController camController;
 	ModelInstance playerinstance;
 	private int blockscale = 5;//pipe height max 65 or 75
 	private float pipespeed = 0.5f;
-	private Texture groundTexture;
 	private float gravity = -65.0f;
 	private float playerforce = 0.0f;
 	boolean collision;
@@ -91,7 +89,6 @@ public class ClassicGameScreen implements Screen, InputProcessor {
     private float bgonex = 0;
     private Texture backgroundtwo;
     private float bgtwox;//look in show()
-    AssetManager assets;
     
     public ClassicGameScreen(Game game, NativeInterface nativeInterface){
     	g = game;
@@ -293,12 +290,14 @@ public class ClassicGameScreen implements Screen, InputProcessor {
         dispatcher = new btCollisionDispatcher(collisionConfig);
         
         //for loading models
-        assets = new  AssetManager();
-        assets.load("models/pipe.g3db",Model.class);
+        if(nface.getAssetManger()==null){
+        	nface.setAssetManger(new  AssetManager());
+        	nface.getAssetManger().load("models/pipe.g3db",Model.class);
+        	nface.getAssetManger().finishLoading();
+        }
 		
 		spawnfloor();
-		assets.finishLoading();
-		pipemodel = assets.get("models/pipe.g3db",Model.class);
+		pipemodel = nface.getAssetManger().get("models/pipe.g3db",Model.class);
 		spawnpipes(pipeinstances, toppipeinstances);
 		spawnplayer();
         groundObject = new btCollisionObject();
@@ -324,10 +323,8 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	}
 	
 	public void spawnfloor(){
-		groundTexture = new Texture("img/grass.png");
 		ModelBuilder modelBuilder = new ModelBuilder();
 		Model model;
-		
 		model = modelBuilder.createBox(blockscale*100, blockscale, blockscale*100, new Material(
 				ColorAttribute.createDiffuse(Color.CLEAR)),
 				Usage.Position | Usage.Normal | Usage.TextureCoordinates);
@@ -481,7 +478,6 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		model.dispose();
 		pipemodel.dispose();
 		modelBatch.dispose();
-		groundTexture.dispose();
 		groundObject.dispose();
 	    groundShape.dispose();	     
 	    ballObject.dispose();
@@ -492,11 +488,11 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	    dieSound.dispose();
 	    flopSound.dispose();
 	    scoreSound.dispose();
+	    nface.dispose();
 	    nface.garbagecollect();
 	    backgroundone.dispose();
 	    backgroundtwo.dispose();
 	    batch.dispose();
-	    assets.dispose();
 		this.dispose();
 	}
 
