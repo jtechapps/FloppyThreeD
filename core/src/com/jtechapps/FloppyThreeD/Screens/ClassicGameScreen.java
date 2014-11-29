@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.ModelLoader;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -52,13 +53,14 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	public PerspectiveCamera camera;
 	private float width;
 	private float height;
-	public ModelBatch modelBatch;
-	public Model model;//create 500*5*500 floor
-	public Array<ModelInstance> instances;
-	public Array<ModelInstance> pipeinstances;
-	public Array<ModelInstance> toppipeinstances;
-	public Environment environment;
-	public CameraInputController camController;
+	private ModelBatch modelBatch;
+	private Model model;//create 500*5*500 floor
+	private Model pipemodel;
+	private Array<ModelInstance> instances;
+	private Array<ModelInstance> pipeinstances;
+	private Array<ModelInstance> toppipeinstances;
+	private Environment environment;
+	private CameraInputController camController;
 	ModelInstance playerinstance;
 	private int blockscale = 5;//pipe height max 65 or 75
 	private float pipespeed = 0.5f;
@@ -89,7 +91,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
     private float bgonex = 0;
     private Texture backgroundtwo;
     private float bgtwox;//look in show()
-    private Texture cactusTexture;
+    AssetManager assets;
     
     public ClassicGameScreen(Game game, NativeInterface nativeInterface){
     	g = game;
@@ -282,7 +284,6 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f,
 				40.0f*blockscale, 50.0f, 10.0f*blockscale));
 		environment.set(new ColorAttribute(ColorAttribute.createSpecular(0.5f, 0.5f, 0.5f, 1f)));
-		//environment.set(new ColorAttribute(ColorAttribute.Fog, 1f, 0.1f, 0.1f, 1.0f));
 
 		//physics
 		ballShape = new btSphereShape(4.0f);
@@ -290,9 +291,14 @@ public class ClassicGameScreen implements Screen, InputProcessor {
         groundShape = new btBoxShape(new Vector3(50.0f*blockscale, 0.5f*blockscale, 50.0f*blockscale));
         collisionConfig = new btDefaultCollisionConfiguration();
         dispatcher = new btCollisionDispatcher(collisionConfig);
+        
+        //for loading models
+        assets = new  AssetManager();
+        assets.load("models/pipe.g3db",Model.class);
 		
 		spawnfloor();
-		cactusTexture = new Texture("img/pipetexture.png");
+		assets.finishLoading();
+		pipemodel = assets.get("models/pipe.g3db",Model.class);
 		spawnpipes(pipeinstances, toppipeinstances);
 		spawnplayer();
         groundObject = new btCollisionObject();
@@ -322,9 +328,6 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		ModelBuilder modelBuilder = new ModelBuilder();
 		Model model;
 		
-		/*model = modelBuilder.createBox(blockscale*100, blockscale, blockscale*100, new Material(
-				TextureAttribute.createDiffuse(groundTexture)),
-				Usage.Position | Usage.Normal | Usage.TextureCoordinates);*/
 		model = modelBuilder.createBox(blockscale*100, blockscale, blockscale*100, new Material(
 				ColorAttribute.createDiffuse(Color.CLEAR)),
 				Usage.Position | Usage.Normal | Usage.TextureCoordinates);
@@ -378,14 +381,8 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	public void spawnpipes(Array<ModelInstance> pinstances, Array<ModelInstance> tinstances){
 		Random rn = new Random();
 		int random = rn.nextInt(29) + 1;
-		ModelBuilder modelBuilder = new ModelBuilder();
-		Model model;
-		/*model = modelBuilder.createCylinder(10.0f, 75.0f, 10.0f, 100, new Material(
-				TextureAttribute.createDiffuse(cactusTexture)), Usage.Position | Usage.Normal);*/
-		ModelLoader loader = new ObjLoader();
-		model = loader.loadModel(Gdx.files.internal("models/pipe.obj"));
-		ModelInstance bottompipeinstance = new ModelInstance(model);
-		ModelInstance toppipeinstance = new ModelInstance(model);
+		ModelInstance bottompipeinstance = new ModelInstance(pipemodel);
+		ModelInstance toppipeinstance = new ModelInstance(pipemodel);
 		bottompipeinstance.transform.translate(40.0f*blockscale, -5.0f-random, 10.0f*blockscale);
 		toppipeinstance.transform.translate(40.0f*blockscale, 95.0f-random, 10.0f*blockscale);
 		pinstances.add(bottompipeinstance);
@@ -482,6 +479,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	@Override
 	public void dispose() {
 		model.dispose();
+		pipemodel.dispose();
 		modelBatch.dispose();
 		groundTexture.dispose();
 		groundObject.dispose();
@@ -497,8 +495,8 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	    nface.garbagecollect();
 	    backgroundone.dispose();
 	    backgroundtwo.dispose();
-	    cactusTexture.dispose();
 	    batch.dispose();
+	    assets.dispose();
 		this.dispose();
 	}
 
