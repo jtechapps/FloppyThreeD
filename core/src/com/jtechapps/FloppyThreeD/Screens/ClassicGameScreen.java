@@ -277,8 +277,11 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 				-0.8f, -0.2f));
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, 1f,
 				0.8f, -0.2f));
+		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, 1f,
+				-0.8f, 2f));
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f,
-				1.4f, 0.4f, 1f));
+				40.0f*blockscale, 50.0f, 10.0f*blockscale));
+		environment.set(new ColorAttribute(ColorAttribute.createSpecular(0.5f, 0.5f, 0.5f, 1f)));
 		//environment.set(new ColorAttribute(ColorAttribute.Fog, 1f, 0.1f, 0.1f, 1.0f));
 
 		//physics
