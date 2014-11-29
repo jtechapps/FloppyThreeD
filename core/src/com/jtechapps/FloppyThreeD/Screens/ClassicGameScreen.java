@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.loaders.ModelLoader;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -22,7 +23,9 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.AmbientCubemap;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
@@ -86,6 +89,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
     private float bgonex = 0;
     private Texture backgroundtwo;
     private float bgtwox;//look in show()
+    private Texture cactusTexture;
     
     public ClassicGameScreen(Game game, NativeInterface nativeInterface){
     	g = game;
@@ -269,6 +273,12 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 				0.4f, 0.4f, 1f));
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f,
 				-0.8f, -0.2f));
+		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, 1f,
+				-0.8f, -0.2f));
+		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, 1f,
+				0.8f, -0.2f));
+		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f,
+				1.4f, 0.4f, 1f));
 		//environment.set(new ColorAttribute(ColorAttribute.Fog, 1f, 0.1f, 0.1f, 1.0f));
 
 		//physics
@@ -279,6 +289,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
         dispatcher = new btCollisionDispatcher(collisionConfig);
 		
 		spawnfloor();
+		cactusTexture = new Texture("img/pipetexture.png");
 		spawnpipes(pipeinstances, toppipeinstances);
 		spawnplayer();
         groundObject = new btCollisionObject();
@@ -366,8 +377,10 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		int random = rn.nextInt(29) + 1;
 		ModelBuilder modelBuilder = new ModelBuilder();
 		Model model;
-		model = modelBuilder.createCylinder(10.0f, 75.0f, 10.0f, 100, new Material(
-				ColorAttribute.createDiffuse(Color.MAGENTA)), Usage.Position | Usage.Normal);
+		/*model = modelBuilder.createCylinder(10.0f, 75.0f, 10.0f, 100, new Material(
+				TextureAttribute.createDiffuse(cactusTexture)), Usage.Position | Usage.Normal);*/
+		ModelLoader loader = new ObjLoader();
+		model = loader.loadModel(Gdx.files.internal("models/pipe.obj"));
 		ModelInstance bottompipeinstance = new ModelInstance(model);
 		ModelInstance toppipeinstance = new ModelInstance(model);
 		bottompipeinstance.transform.translate(40.0f*blockscale, -5.0f-random, 10.0f*blockscale);
@@ -481,6 +494,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	    nface.garbagecollect();
 	    backgroundone.dispose();
 	    backgroundtwo.dispose();
+	    cactusTexture.dispose();
 	    batch.dispose();
 		this.dispose();
 	}
