@@ -2,6 +2,7 @@ package com.jtechapps.FloppyThreeD;
 
 import com.badlogic.gdx.Game;
 import com.jtechapps.FloppyThreeD.Screens.ClassicGameScreen;
+import com.jtechapps.FloppyThreeD.Screens.MainMenuScreen;
 
 public class FloppyGame extends Game {
 	Game g = this;
@@ -14,7 +15,7 @@ public class FloppyGame extends Game {
 	
 	@Override
 	public void create () {
-		this.setScreen(new ClassicGameScreen(g, nface));
+		this.setScreen(new MainMenuScreen(g, nface));
 	}
 
 	@Override
