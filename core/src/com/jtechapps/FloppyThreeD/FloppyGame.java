@@ -19,6 +19,7 @@ public class FloppyGame extends Game {
 
 	@Override
 	public void dispose(){
+		nface.dispose();
 		super.dispose();
 	}
 	
