@@ -1,7 +1,6 @@
 package com.jtechapps.FloppyThreeD;
 
 import com.badlogic.gdx.Game;
-import com.jtechapps.FloppyThreeD.Screens.ClassicGameScreen;
 import com.jtechapps.FloppyThreeD.Screens.MainMenuScreen;
 
 public class FloppyGame extends Game {

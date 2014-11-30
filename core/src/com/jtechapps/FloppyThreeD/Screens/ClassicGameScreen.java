@@ -53,6 +53,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import com.jtechapps.FloppyThreeD.NativeInterface;
 
 public class ClassicGameScreen implements Screen, InputProcessor {
@@ -253,6 +255,12 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		//play sound and wait
 		dieSound.play();
 		dead = true;
+		Timer.schedule(new Task(){
+		    @Override
+		    public void run() {
+		        g.setScreen(new MainMenuScreen(g, nface, score));
+		    }
+		}, 1);
 	}
 
 	@Override
@@ -428,7 +436,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			flopSound.play();
 		}
 		else {
-			g.setScreen(new ClassicGameScreen(g, nface));
+			//g.setScreen(new ClassicGameScreen(g, nface));//for reset settings later
 		}
 	}
 
