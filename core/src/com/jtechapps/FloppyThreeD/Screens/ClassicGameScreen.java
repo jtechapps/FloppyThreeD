@@ -16,7 +16,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -46,6 +49,9 @@ import com.badlogic.gdx.physics.bullet.collision.btDispatcherInfo;
 import com.badlogic.gdx.physics.bullet.collision.btManifoldResult;
 import com.badlogic.gdx.physics.bullet.collision.btSphereBoxCollisionAlgorithm;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Array;
 import com.jtechapps.FloppyThreeD.NativeInterface;
 
@@ -60,11 +66,9 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	private Array<ModelInstance> pipeinstances;
 	private Array<ModelInstance> toppipeinstances;
 	private Environment environment;
-	private CameraInputController camController;
 	ModelInstance playerinstance;
 	private int blockscale = 5;//pipe height max 65 or 75
 	private float pipespeed = 0.5f;
-	private Texture groundTexture;
 	private float gravity = -65.0f;
 	private float playerforce = 0.0f;
 	boolean collision;
@@ -91,7 +95,10 @@ public class ClassicGameScreen implements Screen, InputProcessor {
     private float bgonex = 0;
     private Texture backgroundtwo;
     private float bgtwox;//look in show()
-    AssetManager assets;
+    //label and gui
+    private Stage stage;
+    private LabelStyle labelstyle;
+    private Label counter;
     
     public ClassicGameScreen(Game game, NativeInterface nativeInterface){
     	g = game;
@@ -231,11 +238,13 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		}
 		modelBatch.render(playerinstance, environment);
 		modelBatch.end();
-
+		stage.draw();
 	}
 	
 	private void addscore(){
 		score++;
+		counter.setText(""+score);
+		counter.setPosition(width/2-counter.getWidth()/2, height-height/5);
 		scoreSound.play();
 		Gdx.app.log("score ", ""+score);
 	}
@@ -293,12 +302,19 @@ public class ClassicGameScreen implements Screen, InputProcessor {
         dispatcher = new btCollisionDispatcher(collisionConfig);
         
         //for loading models
-        assets = new  AssetManager();
-        assets.load("models/pipe.g3db",Model.class);
+        if(nface.getAssetManger()==null){
+        	nface.setAssetManger(new  AssetManager());
+        	nface.getAssetManger().load("models/pipe.g3db",Model.class);
+        	FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
+			FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+			parameter.size = (int) (height/18);
+			nface.setFont1(generator.generateFont(parameter));
+			generator.dispose();
+        	nface.getAssetManger().finishLoading();
+        }
 		
 		spawnfloor();
-		assets.finishLoading();
-		pipemodel = assets.get("models/pipe.g3db",Model.class);
+		pipemodel = nface.getAssetManger().get("models/pipe.g3db",Model.class);
 		spawnpipes(pipeinstances, toppipeinstances);
 		spawnplayer();
         groundObject = new btCollisionObject();
@@ -320,14 +336,21 @@ public class ClassicGameScreen implements Screen, InputProcessor {
         backgroundtwo = new Texture("img/backgroundtwo.png");
         bgtwox = width;
         
+        //stage with labels
+        stage = new Stage();
+        labelstyle = new LabelStyle();
+		labelstyle.font=nface.getFont1();
+		labelstyle.fontColor = Color.BLACK;
+		counter = new Label(""+score, labelstyle);
+		counter.setPosition(width/2-counter.getWidth()/2, height-height/5);
+		stage.addActor(counter);
+        
 		Gdx.input.setInputProcessor(this);
 	}
 	
 	public void spawnfloor(){
-		groundTexture = new Texture("img/grass.png");
 		ModelBuilder modelBuilder = new ModelBuilder();
 		Model model;
-		
 		model = modelBuilder.createBox(blockscale*100, blockscale, blockscale*100, new Material(
 				ColorAttribute.createDiffuse(Color.CLEAR)),
 				Usage.Position | Usage.Normal | Usage.TextureCoordinates);
@@ -481,7 +504,6 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		model.dispose();
 		pipemodel.dispose();
 		modelBatch.dispose();
-		groundTexture.dispose();
 		groundObject.dispose();
 	    groundShape.dispose();	     
 	    ballObject.dispose();
@@ -496,7 +518,8 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	    backgroundone.dispose();
 	    backgroundtwo.dispose();
 	    batch.dispose();
-	    assets.dispose();
+	    stage.dispose();
+	    labelstyle.font.dispose();
 		this.dispose();
 	}
 
