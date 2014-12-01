@@ -313,6 +313,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
         if(nface.getAssetManger()==null){
         	nface.setAssetManger(new  AssetManager());
         	nface.getAssetManger().load("models/pipe.g3db",Model.class);
+        	nface.getAssetManger().load("models/bird.g3db",Model.class);
         	FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
 			FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 			parameter.size = (int) (height/18);
@@ -404,7 +405,8 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	
 	public void spawnplayer(){
 		ModelBuilder modelBuilder = new ModelBuilder();
-		model = modelBuilder.createSphere(8.0f, 8.0f, 8.0f, 100, 100, new Material(ColorAttribute.createDiffuse(Color.MAROON)), Usage.Position | Usage.Normal);
+		model = nface.getAssetManger().get("models/bird.g3db",Model.class);
+		//model = modelBuilder.createSphere(8.0f, 8.0f, 8.0f, 100, 100, new Material(ColorAttribute.createDiffuse(Color.MAROON)), Usage.Position | Usage.Normal);
 		playerinstance = new ModelInstance(model);
 		playerinstance.transform.translate(53.0f*blockscale, 40.0f, 10.0f*blockscale);
 	}

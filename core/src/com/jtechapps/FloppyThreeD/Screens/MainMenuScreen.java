@@ -119,6 +119,7 @@ public class MainMenuScreen implements Screen {
 		if(nface.getAssetManger()==null){// load assets 
         	nface.setAssetManger(new  AssetManager());
         	nface.getAssetManger().load("models/pipe.g3db",Model.class);
+        	nface.getAssetManger().load("models/bird.g3db",Model.class);
         	FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
 			FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 			parameter.size = (int) (height/18);
