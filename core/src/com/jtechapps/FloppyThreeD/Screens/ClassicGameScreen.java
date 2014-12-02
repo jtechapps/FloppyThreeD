@@ -101,6 +101,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
     private Stage stage;
     private LabelStyle labelstyle;
     private Label counter;
+    private float playerangle = 0.0f;
     
     public ClassicGameScreen(Game game, NativeInterface nativeInterface){
     	g = game;
@@ -230,7 +231,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 				playerdie();
 			}
 			Vector3 playertmppos = new Vector3();
-			playerinstance.transform.getTranslation(playertmppos);
+			playerinstance.calculateTransforms();
 			if(playertmppos.y >= 90){
 				playerdie();
 			}
@@ -404,9 +405,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	}
 	
 	public void spawnplayer(){
-		ModelBuilder modelBuilder = new ModelBuilder();
 		model = nface.getAssetManger().get("models/bird.g3db",Model.class);
-		//model = modelBuilder.createSphere(8.0f, 8.0f, 8.0f, 100, 100, new Material(ColorAttribute.createDiffuse(Color.MAROON)), Usage.Position | Usage.Normal);
 		playerinstance = new ModelInstance(model);
 		playerinstance.transform.translate(53.0f*blockscale, 40.0f, 10.0f*blockscale);
 	}
