@@ -102,6 +102,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
     private LabelStyle labelstyle;
     private Label counter;
     private float playerangle = 0.0f;
+    private float playeranglemove = 1.0f;
     
     public ClassicGameScreen(Game game, NativeInterface nativeInterface){
     	g = game;
@@ -226,12 +227,47 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			}
 			playerinstance.transform.translate(0, playerforcetoapply/2, 0);
 			ballObject.setWorldTransform(playerinstance.transform);
+			if(playerforcetoapply/2>Math.abs(gravity*delta)){
+				if(playerangle>=50.0f)
+				{
+					playerinstance.transform.rotate(0, 0, 1, -playeranglemove);
+					playerangle-=playeranglemove;
+				}
+				else if(playerangle<=-50.0f)
+				{
+					playerinstance.transform.rotate(0, 0, 1, playeranglemove*4);
+					playerangle+=playeranglemove*4;
+				}
+				else {
+					playerinstance.transform.rotate(0, 0, 1, -playeranglemove*3);
+					playerangle+=-playeranglemove*3;
+				}
+				playerinstance.calculateTransforms();
+			}
+			else {
+				if(playerangle>=50.0f)
+				{
+					playerinstance.transform.rotate(0, 0, 1, -playeranglemove);
+					playerangle-=playeranglemove;
+				}
+				else if(playerangle<=-50.0f)
+				{
+					playerinstance.transform.rotate(0, 0, 1, playeranglemove*2);
+					playerangle+=playeranglemove*2;
+				}
+				else {
+					playerinstance.transform.rotate(0, 0, 1, 2*playeranglemove);
+					playerangle+=2*playeranglemove;
+				}
+				playerinstance.calculateTransforms();
+			}
+			
 			collision = checkCollision();
 			if(collision){
 				playerdie();
 			}
 			Vector3 playertmppos = new Vector3();
-			playerinstance.calculateTransforms();
+			
 			if(playertmppos.y >= 90){
 				playerdie();
 			}
