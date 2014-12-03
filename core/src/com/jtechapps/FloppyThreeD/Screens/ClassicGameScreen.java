@@ -384,8 +384,8 @@ public class ClassicGameScreen implements Screen, InputProcessor {
         
         //2d textures
         batch = new SpriteBatch();
-        backgroundone = new Texture("img/backgroundone.png");
-        backgroundtwo = new Texture("img/backgroundtwo.png");
+        backgroundone = new Texture("img/backgroundonev2.png");
+        backgroundtwo = new Texture("img/backgroundtwov2.png");
         bgtwox = width;
         
         //stage with labels
