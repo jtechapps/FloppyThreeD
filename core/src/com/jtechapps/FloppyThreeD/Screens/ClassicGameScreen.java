@@ -411,7 +411,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		instances.add(instance);
 	}
 	
-	public void spawnCubeArray(Array<ModelInstance> cubeinstances){
+	public void spawnCubeArray(Array<ModelInstance> cubeinstances){//not used now but has cool effect
 		for (int z = 0; z < 100; z++) {
 			for (int x = 0; x < 100; x++) {
 				ModelBuilder modelBuilder = new ModelBuilder();
