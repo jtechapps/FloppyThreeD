@@ -271,7 +271,9 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 				playerdie();
 			}
 			Vector3 playertmppos = new Vector3();
-			
+			playerinstance.transform.rotate(0, 0, 1, -playerangle);
+			playerinstance.transform.getTranslation(playertmppos);
+			playerinstance.transform.rotate(0, 0, 1, playerangle);
 			if(playertmppos.y >= 90){
 				playerdie();
 			}

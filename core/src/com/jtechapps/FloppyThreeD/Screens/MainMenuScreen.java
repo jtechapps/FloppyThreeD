@@ -70,7 +70,7 @@ public class MainMenuScreen implements Screen {
 	@Override
 	public void show() {
 		batch = new SpriteBatch();
-		background = new Texture("img/backgroundone.png");
+		background = new Texture("img/backgroundonev2.png");
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		//load up the buttons
