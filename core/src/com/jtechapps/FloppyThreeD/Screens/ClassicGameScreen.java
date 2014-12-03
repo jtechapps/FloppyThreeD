@@ -218,14 +218,18 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		//player physics
 		if(!collision && touched && !dead){
 			//gravity
+			playerinstance.transform.rotate(0, 0, 1, -playerangle);
 			playerinstance.transform.translate(0, gravity*delta, 0);
+			playerinstance.transform.rotate(0, 0, 1, playerangle);
 			//jumps
 			float playerforcetoapply = playerforce*delta*2;
 			playerforce-=playerforcetoapply;
 			if(playerforce<=0){
 				playerforce = 0.0f;
 			}
+			playerinstance.transform.rotate(0, 0, 1, -playerangle);
 			playerinstance.transform.translate(0, playerforcetoapply/2, 0);
+			playerinstance.transform.rotate(0, 0, 1, playerangle);
 			ballObject.setWorldTransform(playerinstance.transform);
 			if(playerforcetoapply/2>Math.abs(gravity*delta)){
 				if(playerangle>=50.0f)
@@ -273,7 +277,9 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			}
 		}
 		else if(touched && dead && collision){
+			playerinstance.transform.rotate(0, 0, 1, -playerangle);
 			playerinstance.transform.translate(0, gravity*delta, 0);
+			playerinstance.transform.rotate(0, 0, 1, playerangle);
 		}
 		modelBatch.render(playerinstance, environment);
 		modelBatch.end();
