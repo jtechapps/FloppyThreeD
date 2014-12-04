@@ -100,6 +100,13 @@ public class MainMenuScreen implements Screen {
 		firstperson.setHeight(height/7);
 		firstperson.setX(width-width/4-firstperson.getWidth());
 		firstperson.setY(height-height/4-firstperson.getHeight());
+		firstperson.addListener(new ClickListener() {
+		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
+		    {
+		        g.setScreen(new FirstPersonScreen(g, nface));
+		        return true;
+		    }
+		});
 		stage.addActor(firstperson);
 		
 		Image settings = new Image(settingsTexture);
