@@ -237,8 +237,8 @@ public class FirstPersonScreen implements Screen, InputProcessor {
 					playerangle+=playeranglemove*4;
 				}
 				else {
-					playerinstance.transform.rotate(0, 0, 1, -playeranglemove*3);
-					playerangle+=-playeranglemove*3;
+					playerinstance.transform.rotate(0, 0, 1, -playeranglemove*4);
+					playerangle+=-playeranglemove*4;
 				}
 				playerinstance.calculateTransforms();
 			}
@@ -346,7 +346,7 @@ public class FirstPersonScreen implements Screen, InputProcessor {
 
 		//physics
 		ballShape = new btSphereShape(4.0f);
-		pipeShape = new btCylinderShape(new Vector3(5.0f, 75.0f/2, 5.0f));
+		pipeShape = new btCylinderShape(new Vector3(5.0f, 70.0f/2, 5.0f));
         groundShape = new btBoxShape(new Vector3(50.0f*blockscale, 0.5f*blockscale, 50.0f*blockscale));
         collisionConfig = new btDefaultCollisionConfiguration();
         dispatcher = new btCollisionDispatcher(collisionConfig);
