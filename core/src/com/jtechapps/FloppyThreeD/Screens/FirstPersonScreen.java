@@ -9,14 +9,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.ModelLoader;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
@@ -26,11 +24,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
-import com.badlogic.gdx.graphics.g3d.environment.AmbientCubemap;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
-import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
@@ -57,7 +51,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.jtechapps.FloppyThreeD.NativeInterface;
 
-public class ClassicGameScreen implements Screen, InputProcessor {
+public class FirstPersonScreen implements Screen, InputProcessor {
 	public PerspectiveCamera camera;
 	private float width;
 	private float height;
@@ -104,7 +98,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
     private float playerangle = 0.0f;
     private float playeranglemove = 1.0f;
     
-    public ClassicGameScreen(Game game, NativeInterface nativeInterface){
+    public FirstPersonScreen(Game game, NativeInterface nativeInterface){
     	g = game;
     	nface = nativeInterface;
     }
@@ -273,6 +267,9 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			Vector3 playertmppos = new Vector3();
 			playerinstance.transform.rotate(0, 0, 1, -playerangle);
 			playerinstance.transform.getTranslation(playertmppos);
+			camera.position.set(playertmppos);
+			camera.lookAt(40.0f*blockscale, playertmppos.y, 10.0f*blockscale);
+			camera.update();
 			playerinstance.transform.rotate(0, 0, 1, playerangle);
 			if(playertmppos.y >= 90){
 				playerdie();
@@ -320,8 +317,8 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		camera = new PerspectiveCamera(67, 640*2, 480*2);
-		camera.position.set(50.0f*blockscale, 25.0f, 0.0f);
-		camera.lookAt(50.0f*blockscale, 25.0f, 50.0f*blockscale);
+		camera.position.set(53.0f*blockscale, 40.0f, 10.0f*blockscale);
+		camera.lookAt(40.0f*blockscale, 40.0f, 10.0f*blockscale);
 		camera.near = 1f;
 		camera.far = 300f;
 		camera.update();
@@ -349,7 +346,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 
 		//physics
 		ballShape = new btSphereShape(4.0f);
-		pipeShape = new btCylinderShape(new Vector3(5.0f, 75.0f/2, 5.0f));
+		pipeShape = new btCylinderShape(new Vector3(5.0f, 70.0f/2, 5.0f));
         groundShape = new btBoxShape(new Vector3(50.0f*blockscale, 0.5f*blockscale, 50.0f*blockscale));
         collisionConfig = new btDefaultCollisionConfiguration();
         dispatcher = new btCollisionDispatcher(collisionConfig);
