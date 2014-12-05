@@ -97,6 +97,7 @@ public class FirstPersonScreen implements Screen, InputProcessor {
     private Label counter;
     private float playerangle = 0.0f;
     private float playeranglemove = 1.0f;
+    private int pipebuffer = 5;
     
     public FirstPersonScreen(Game game, NativeInterface nativeInterface){
     	g = game;
@@ -164,7 +165,7 @@ public class FirstPersonScreen implements Screen, InputProcessor {
 			float playerx = playertmp.x;
 			
 			if(x == 50*blockscale){//middle
-				spawnpipes(pipeinstances, toppipeinstances);
+				spawnpipes(pipeinstances, toppipeinstances, pipebuffer);
 			}
 			
 			if(x == playerx){//add score
@@ -367,6 +368,9 @@ public class FirstPersonScreen implements Screen, InputProcessor {
 		spawnfloor();
 		pipemodel = nface.getAssetManger().get("models/pipe.g3db",Model.class);
 		spawnpipes(pipeinstances, toppipeinstances);
+		for(int backpipes = 1; backpipes <= pipebuffer; backpipes++){
+			spawnpipes(pipeinstances, toppipeinstances, backpipes);
+		}
 		spawnplayer();
         groundObject = new btCollisionObject();
         groundObject.setCollisionShape(groundShape);
@@ -458,6 +462,25 @@ public class FirstPersonScreen implements Screen, InputProcessor {
 		ModelInstance toppipeinstance = new ModelInstance(pipemodel);
 		bottompipeinstance.transform.translate(40.0f*blockscale, -5.0f-random, 10.0f*blockscale);
 		toppipeinstance.transform.translate(40.0f*blockscale, 95.0f-random, 10.0f*blockscale);
+		pinstances.add(bottompipeinstance);
+		tinstances.add(toppipeinstance);
+		btCollisionObject bottompipeObject = new btCollisionObject();
+	    bottompipeObject.setCollisionShape(pipeShape);
+	    bottompipeObject.setWorldTransform(bottompipeinstance.transform);
+	    btCollisionObject toppipeObject = new btCollisionObject();
+	    toppipeObject.setCollisionShape(pipeShape);
+	    toppipeObject.setWorldTransform(toppipeinstance.transform);
+	    pipecollisions.add(bottompipeObject);
+	    toppipecollisions.add(toppipeObject);
+	}
+	
+	public void spawnpipes(Array<ModelInstance> pinstances, Array<ModelInstance> tinstances, int positionback){
+		Random rn = new Random();
+		int random = rn.nextInt(29) + 1;
+		ModelInstance bottompipeinstance = new ModelInstance(pipemodel);
+		ModelInstance toppipeinstance = new ModelInstance(pipemodel);
+		bottompipeinstance.transform.translate(40.0f*blockscale-(positionback*10*blockscale), -5.0f-random, 10.0f*blockscale);
+		toppipeinstance.transform.translate(40.0f*blockscale-(positionback*10*blockscale), 95.0f-random, 10.0f*blockscale);
 		pinstances.add(bottompipeinstance);
 		tinstances.add(toppipeinstance);
 		btCollisionObject bottompipeObject = new btCollisionObject();
