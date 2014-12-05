@@ -243,8 +243,8 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 					playerangle+=playeranglemove*4;
 				}
 				else {
-					playerinstance.transform.rotate(0, 0, 1, -playeranglemove*3);
-					playerangle+=-playeranglemove*3;
+					playerinstance.transform.rotate(0, 0, 1, -playeranglemove*4);
+					playerangle+=-playeranglemove*4;
 				}
 				playerinstance.calculateTransforms();
 			}
