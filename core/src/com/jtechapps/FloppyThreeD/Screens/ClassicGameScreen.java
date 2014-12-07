@@ -56,6 +56,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.jtechapps.FloppyThreeD.NativeInterface;
+import com.jtechapps.FloppyThreeD.SettingsManager;
 
 public class ClassicGameScreen implements Screen, InputProcessor {
 	public PerspectiveCamera camera;
@@ -103,6 +104,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
     private Label counter;
     private float playerangle = 0.0f;
     private float playeranglemove = 1.0f;
+    private SettingsManager settingsManager = new SettingsManager();
     
     public ClassicGameScreen(Game game, NativeInterface nativeInterface){
     	g = game;
@@ -301,9 +303,10 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		dieSound.play();
 		dead = true;
 		Timer.schedule(new Task(){
-		    @Override
+			@Override
 		    public void run() {
-		        g.setScreen(new MainMenuScreen(g, nface, score));
+		    	if(!settingsManager.getquickreset())
+		    		g.setScreen(new MainMenuScreen(g, nface, score));
 		    }
 		}, 1);
 	}
@@ -481,7 +484,8 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			flopSound.play();
 		}
 		else {
-			//g.setScreen(new ClassicGameScreen(g, nface));//for reset settings later
+			if(settingsManager.getquickreset())
+				g.setScreen(new ClassicGameScreen(g, nface));
 		}
 	}
 
@@ -580,6 +584,9 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	public boolean keyDown(int keycode) {
 		if(keycode == Input.Keys.SPACE){
 			jump();
+		}
+		else if(keycode == Input.Keys.ESCAPE){
+			g.setScreen(new MainMenuScreen(g, nface));
 		}
 		return false;
 	}
