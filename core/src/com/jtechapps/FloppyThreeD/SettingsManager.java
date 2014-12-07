@@ -5,7 +5,7 @@ import com.badlogic.gdx.Preferences;
 
 public class SettingsManager {
 	private boolean quickreset;
-	private int difficulty = 1;//0 is noob 1 is easy; 2 is medium; 3 is hard; 4 is pro
+	private int difficulty = 1;//0 is noob; 1 is easy; 2 is medium; 3 is hard; 4 is pro
 	
 	public void togglequickreset(){
 		quickreset ^= true;
@@ -29,7 +29,12 @@ public class SettingsManager {
 		prefs.flush();
 	}
 	
+	/**
+	 * 0 is noob; 1 is easy; 2 is medium; 3 is hard; 4 is pro
+	 * @return
+	 */
 	public int getdifficulty(){
-		return difficulty;
+		Preferences prefs = Gdx.app.getPreferences("FloppyThreeD");
+		return prefs.getInteger("difficulty", difficulty);
 	}
 }

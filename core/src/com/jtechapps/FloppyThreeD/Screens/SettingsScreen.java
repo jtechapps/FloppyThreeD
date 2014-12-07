@@ -28,7 +28,11 @@ public class SettingsScreen implements Screen {
 	private float width;
 	private float height;
 	private Texture quickresetTexture;
+	private Texture noobTexture;
 	private Texture easyTexture;
+	private Texture mediumTexture;
+	private Texture hardTexture;
+	private Texture proTexture;
 	private Stage stage;
 	private Texture quickresetonTexture;
 	private Texture menuTexture;
@@ -63,7 +67,11 @@ public class SettingsScreen implements Screen {
 		//load up the buttons
 		quickresetTexture = new Texture("img/quickresetoff.png");
 		quickresetonTexture = new Texture("img/quickreseton.png");
+		noobTexture = new Texture("img/noob.png");
 		easyTexture = new Texture("img/easy.png");
+		mediumTexture = new Texture("img/medium.png");
+		hardTexture = new Texture("img/hard.png");
+		proTexture = new Texture("img/pro.png");
 		aboutTexture = new Texture("img/aboutbutton.png");
 		menuTexture = new Texture("img/menubutton.png");
 		
@@ -92,7 +100,22 @@ public class SettingsScreen implements Screen {
 		});
 		stage.addActor(quickreset);
 		
-		Image difficulty = new Image(easyTexture);
+		final Image difficulty = new Image(easyTexture);
+		if(settingsManager.getdifficulty()==0){
+			difficulty.setDrawable(new SpriteDrawable(new Sprite(noobTexture)));
+		}
+		else if(settingsManager.getdifficulty()==1){
+			difficulty.setDrawable(new SpriteDrawable(new Sprite(easyTexture)));
+		}
+		else if(settingsManager.getdifficulty()==2){
+			difficulty.setDrawable(new SpriteDrawable(new Sprite(mediumTexture)));
+		}
+		else if(settingsManager.getdifficulty()==3){
+			difficulty.setDrawable(new SpriteDrawable(new Sprite(hardTexture)));
+		}
+		else if(settingsManager.getdifficulty()==4){  
+			difficulty.setDrawable(new SpriteDrawable(new Sprite(proTexture)));
+		}
 		difficulty.setWidth(width/5);
 		difficulty.setHeight(height/7);
 		difficulty.setX(width-width/4-difficulty.getWidth());
@@ -100,7 +123,22 @@ public class SettingsScreen implements Screen {
 		difficulty.addListener(new ClickListener() {
 		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
 		    {
-		        
+		        settingsManager.toggledifficulty();
+		        if(settingsManager.getdifficulty()==0){
+					difficulty.setDrawable(new SpriteDrawable(new Sprite(noobTexture)));
+				}
+				else if(settingsManager.getdifficulty()==1){
+					difficulty.setDrawable(new SpriteDrawable(new Sprite(easyTexture)));
+				}
+				else if(settingsManager.getdifficulty()==2){
+					difficulty.setDrawable(new SpriteDrawable(new Sprite(mediumTexture)));
+				}
+				else if(settingsManager.getdifficulty()==3){
+					difficulty.setDrawable(new SpriteDrawable(new Sprite(hardTexture)));
+				}
+				else if(settingsManager.getdifficulty()==4){  
+					difficulty.setDrawable(new SpriteDrawable(new Sprite(proTexture)));
+				}
 		        return true;
 		    }
 		});
@@ -162,7 +200,11 @@ public class SettingsScreen implements Screen {
 		background.dispose();
 		quickresetTexture.dispose();
 		quickresetonTexture.dispose();
+		noobTexture.dispose();
 		easyTexture.dispose();
+		mediumTexture.dispose();
+		hardTexture.dispose();
+		proTexture.dispose();
 		menuTexture.dispose();
 		aboutTexture.dispose();
 		batch.dispose();

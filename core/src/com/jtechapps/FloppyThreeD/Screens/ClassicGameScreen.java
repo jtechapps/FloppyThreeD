@@ -352,7 +352,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 
 		//physics
 		ballShape = new btSphereShape(4.0f);
-		pipeShape = new btCylinderShape(new Vector3(5.0f, 75.0f/2, 5.0f));
+		pipeShape = new btCylinderShape(new Vector3(5.0f, 68.0f/2, 5.0f));
         groundShape = new btBoxShape(new Vector3(50.0f*blockscale, 0.5f*blockscale, 50.0f*blockscale));
         collisionConfig = new btDefaultCollisionConfiguration();
         dispatcher = new btCollisionDispatcher(collisionConfig);
@@ -462,7 +462,23 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		int random = rn.nextInt(29) + 1;
 		ModelInstance bottompipeinstance = new ModelInstance(pipemodel);
 		ModelInstance toppipeinstance = new ModelInstance(pipemodel);
-		bottompipeinstance.transform.translate(40.0f*blockscale, -5.0f-random, 10.0f*blockscale);
+		float distanceapart = 100;
+		if(settingsManager.getdifficulty()==0){
+			distanceapart = 120.0f;
+		}
+		else if(settingsManager.getdifficulty()==1){
+			distanceapart = 100.0f;
+		}
+		else if(settingsManager.getdifficulty()==2){
+			distanceapart = 95.0f;
+		}
+		else if(settingsManager.getdifficulty()==3){
+			distanceapart = 90.0f;
+		}
+		else if(settingsManager.getdifficulty()==4){
+			distanceapart = 85.0f;
+		}
+		bottompipeinstance.transform.translate(40.0f*blockscale, 95.0f-distanceapart-random, 10.0f*blockscale);
 		toppipeinstance.transform.translate(40.0f*blockscale, 95.0f-random, 10.0f*blockscale);
 		pinstances.add(bottompipeinstance);
 		tinstances.add(toppipeinstance);
