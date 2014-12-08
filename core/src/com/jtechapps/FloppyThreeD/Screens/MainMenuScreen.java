@@ -38,13 +38,13 @@ public class MainMenuScreen implements Screen {
 	private int score = 0;
 	private int highscore = 0;
 	private ScoreManager scoreManager = new ScoreManager();
-	
+
 	public MainMenuScreen(Game game, NativeInterface nativeinterface){
 		g = game;
 		nface = nativeinterface;
 		highscore = scoreManager.getHighScore();
 	}
-	
+
 	public MainMenuScreen(Game game, NativeInterface nativeinterface, int score){
 		g = game;
 		nface = nativeinterface;
@@ -64,7 +64,7 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		
+
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class MainMenuScreen implements Screen {
 		firstpersonTexture = new Texture("img/firstpersonbutton.png");
 		settingsTexture = new Texture("img/settingsbutton.png");
 		aboutTexture = new Texture("img/aboutbutton.png");
-		
+
 		//use images for the stage
 		stage = new Stage();
 		Image classic = new Image(classicTexture);
@@ -94,7 +94,7 @@ public class MainMenuScreen implements Screen {
 		    }
 		});
 		stage.addActor(classic);
-		
+
 		Image firstperson = new Image(firstpersonTexture);
 		firstperson.setWidth(width/5);
 		firstperson.setHeight(height/7);
@@ -108,7 +108,7 @@ public class MainMenuScreen implements Screen {
 		    }
 		});
 		stage.addActor(firstperson);
-		
+
 		Image settings = new Image(settingsTexture);
 		settings.setWidth(width/5);
 		settings.setHeight(height/7);
@@ -123,15 +123,22 @@ public class MainMenuScreen implements Screen {
 		});
 		stage.addActor(firstperson);
 		stage.addActor(settings);
-		
+
 		Image about = new Image(aboutTexture);
 		about.setWidth(width/5);
 		about.setHeight(height/7);
 		about.setX(width-width/4-firstperson.getWidth());
 		about.setY(height-height/4-about.getHeight()-firstperson.getHeight()-firstperson.getHeight()/2);
+		about.addListener(new ClickListener() {
+		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
+		    {
+		        g.setScreen(new AboutScreen(g, nface));
+		        return true;
+		    }
+		});
 		stage.addActor(about);
-		
-		if(nface.getAssetManger()==null){// load assets 
+
+		if(nface.getAssetManger()==null){// load assets
         	nface.setAssetManger(new  AssetManager());
         	nface.getAssetManger().load("models/pipe.g3db",Model.class);
         	nface.getAssetManger().load("models/bird.g3db",Model.class);
@@ -142,7 +149,7 @@ public class MainMenuScreen implements Screen {
 			generator.dispose();
         	nface.getAssetManger().finishLoading();
         }
-		
+
 		labelstyle = new LabelStyle();
 		labelstyle.font=nface.getFont1();
 		labelstyle.fontColor = Color.BLACK;
@@ -152,23 +159,23 @@ public class MainMenuScreen implements Screen {
 		highscorelabel = new Label("High Score: "+highscore, labelstyle);
 		highscorelabel.setPosition(width/4, height-height/4+scorelabel.getHeight());
 		stage.addActor(highscorelabel);
-		
+
 		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override
 	public void hide() {
-		
+
 	}
 
 	@Override
 	public void pause() {
-		
+
 	}
 
 	@Override
 	public void resume() {
-		
+
 	}
 
 	@Override
