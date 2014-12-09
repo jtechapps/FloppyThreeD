@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -32,6 +33,7 @@ public class AboutScreen implements Screen {
 	private Stage stage;
 	private LabelStyle labelstyle;
 	private Label aboutlabel;
+	private Sound buttonSound;
 
 	public AboutScreen(Game game, NativeInterface nativeinterface){
 		g = game;
@@ -61,6 +63,7 @@ public class AboutScreen implements Screen {
 		//load up the buttons
 		menuTexture = new Texture("img/menubutton.png");
 
+		buttonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/switch.wav"));
 		//use images for the stage
 		stage = new Stage();
 		Image menu = new Image(menuTexture);
@@ -71,6 +74,7 @@ public class AboutScreen implements Screen {
 		menu.addListener(new ClickListener() {
 		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
 		    {
+		    	buttonSound.play();
 		        g.setScreen(new MainMenuScreen(g, nface));
 		        return true;
 		    }
@@ -121,6 +125,7 @@ public class AboutScreen implements Screen {
 		batch.dispose();
 		labelstyle.font.dispose();
 		stage.dispose();
+		buttonSound.dispose();
 		this.dispose();
 	}
 

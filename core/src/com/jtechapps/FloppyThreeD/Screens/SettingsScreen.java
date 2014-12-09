@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -38,6 +39,7 @@ public class SettingsScreen implements Screen {
 	private Texture menuTexture;
 	private Texture aboutTexture;
 	private SettingsManager settingsManager = new SettingsManager();
+	private Sound buttonSound;
 
 	public SettingsScreen(Game game, NativeInterface nativeinterface){
 		g = game;
@@ -74,6 +76,8 @@ public class SettingsScreen implements Screen {
 		proTexture = new Texture("img/pro.png");
 		aboutTexture = new Texture("img/aboutbutton.png");
 		menuTexture = new Texture("img/menubutton.png");
+		//sounds
+		buttonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/switch.wav"));
 
 		//use images for the stage
 		stage = new Stage();
@@ -88,6 +92,7 @@ public class SettingsScreen implements Screen {
 		quickreset.addListener(new ClickListener() {
 		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
 		    {
+		    	buttonSound.play();
 		        settingsManager.togglequickreset();
 		        if(settingsManager.getquickreset()){
 					quickreset.setDrawable(new SpriteDrawable(new Sprite(quickresetonTexture)));
@@ -123,6 +128,7 @@ public class SettingsScreen implements Screen {
 		difficulty.addListener(new ClickListener() {
 		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
 		    {
+		    	buttonSound.play();
 		        settingsManager.toggledifficulty();
 		        if(settingsManager.getdifficulty()==0){
 					difficulty.setDrawable(new SpriteDrawable(new Sprite(noobTexture)));
@@ -152,6 +158,7 @@ public class SettingsScreen implements Screen {
 		menu.addListener(new ClickListener() {
 		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
 		    {
+		    	buttonSound.play();
 		        g.setScreen(new MainMenuScreen(g, nface));
 		        return true;
 		    }
@@ -166,6 +173,7 @@ public class SettingsScreen implements Screen {
 		about.addListener(new ClickListener() {
 		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
 		    {
+		    	buttonSound.play();
 		        g.setScreen(new AboutScreen(g, nface));
 		        return true;
 		    }
@@ -216,6 +224,7 @@ public class SettingsScreen implements Screen {
 		aboutTexture.dispose();
 		batch.dispose();
 		stage.dispose();
+		buttonSound.dispose();
 		this.dispose();
 	}
 

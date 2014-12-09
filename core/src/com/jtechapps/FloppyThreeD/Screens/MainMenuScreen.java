@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -38,6 +39,7 @@ public class MainMenuScreen implements Screen {
 	private int score = 0;
 	private int highscore = 0;
 	private ScoreManager scoreManager = new ScoreManager();
+	private Sound buttonSound;
 
 	public MainMenuScreen(Game game, NativeInterface nativeinterface){
 		g = game;
@@ -74,6 +76,7 @@ public class MainMenuScreen implements Screen {
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		//load up the buttons
+		buttonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/switch.wav"));
 		classicTexture = new Texture("img/classicbutton.png");
 		firstpersonTexture = new Texture("img/firstpersonbutton.png");
 		settingsTexture = new Texture("img/settingsbutton.png");
@@ -89,6 +92,7 @@ public class MainMenuScreen implements Screen {
 		classic.addListener(new ClickListener() {
 		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
 		    {
+		    	buttonSound.play();
 		        g.setScreen(new ClassicGameScreen(g, nface));
 		        return true;
 		    }
@@ -103,6 +107,7 @@ public class MainMenuScreen implements Screen {
 		firstperson.addListener(new ClickListener() {
 		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
 		    {
+		    	buttonSound.play();
 		        g.setScreen(new FirstPersonScreen(g, nface));
 		        return true;
 		    }
@@ -117,6 +122,7 @@ public class MainMenuScreen implements Screen {
 		settings.addListener(new ClickListener() {
 		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
 		    {
+		    	buttonSound.play();
 		        g.setScreen(new SettingsScreen(g, nface));
 		        return true;
 		    }
@@ -132,6 +138,7 @@ public class MainMenuScreen implements Screen {
 		about.addListener(new ClickListener() {
 		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
 		    {
+		    	buttonSound.play();
 		        g.setScreen(new AboutScreen(g, nface));
 		        return true;
 		    }
@@ -188,6 +195,7 @@ public class MainMenuScreen implements Screen {
 		batch.dispose();
 		labelstyle.font.dispose();
 		stage.dispose();
+		buttonSound.dispose();
 		this.dispose();
 	}
 
