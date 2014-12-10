@@ -77,7 +77,7 @@ public class SettingsScreen implements Screen {
 		aboutTexture = new Texture("img/aboutbutton.png");
 		menuTexture = new Texture("img/menubutton.png");
 		//sounds
-		buttonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/switch.wav"));
+		buttonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonsound.wav"));
 
 		//use images for the stage
 		stage = new Stage();

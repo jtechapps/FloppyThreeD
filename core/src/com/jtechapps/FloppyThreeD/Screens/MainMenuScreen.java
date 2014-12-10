@@ -76,7 +76,7 @@ public class MainMenuScreen implements Screen {
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		//load up the buttons
-		buttonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/switch.wav"));
+		buttonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonsound.wav"));
 		classicTexture = new Texture("img/classicbutton.png");
 		firstpersonTexture = new Texture("img/firstpersonbutton.png");
 		settingsTexture = new Texture("img/settingsbutton.png");

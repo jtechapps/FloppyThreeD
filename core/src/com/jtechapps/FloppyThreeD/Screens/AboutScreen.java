@@ -63,7 +63,7 @@ public class AboutScreen implements Screen {
 		//load up the buttons
 		menuTexture = new Texture("img/menubutton.png");
 
-		buttonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/switch.wav"));
+		buttonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonsound.wav"));
 		//use images for the stage
 		stage = new Stage();
 		Image menu = new Image(menuTexture);
