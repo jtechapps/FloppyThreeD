@@ -105,7 +105,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
     private float playerangle = 0.0f;
     private float playeranglemove = 1.0f;
     private SettingsManager settingsManager = new SettingsManager();
-    
+
     public ClassicGameScreen(Game game, NativeInterface nativeInterface){
     	g = game;
     	nface = nativeInterface;
@@ -132,9 +132,6 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		}
 		batch.end();
 		modelBatch.begin(camera);
-		for (ModelInstance minstance : instances) {
-			//modelBatch.render(minstance, environment);//ground is now invisible
-		}
 		for (int arrayint = 0; arrayint < pipeinstances.size; arrayint++){
 			if(touched && !dead){
 				pipeinstances.get(arrayint).transform.translate(pipespeed, 0, 0);
@@ -146,7 +143,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			}
 			modelBatch.render(pipeinstances.get(arrayint), environment);
 		}
-		
+
 		for (int arrayint = 0; arrayint < toppipeinstances.size; arrayint++) {
 			if(touched && !dead){
 				toppipeinstances.get(arrayint).transform.translate(pipespeed, 0, 0);
@@ -159,27 +156,27 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			modelBatch.render(toppipeinstances.get(arrayint), environment);
 		}
 		//check if pipes moved off screen.
-		
+
 		Iterator<ModelInstance> iter = pipeinstances.iterator();
 		while(iter.hasNext()) {
 			ModelInstance pipe = iter.next();
 			Vector3 tmp = new Vector3();
 			pipe.transform.getTranslation(tmp);
 			float x = tmp.x;
-			
+
 			Vector3 playertmp = new Vector3();
 			playerinstance.transform.getTranslation(playertmp);
 			float playerx = playertmp.x;
-			
+
 			if(x == 50*blockscale){//middle
 				spawnpipes(pipeinstances, toppipeinstances);
 			}
-			
+
 			if(x == playerx){//add score
 				if(!dead)
 					addscore();
 			}
-				
+
 	        if(x >= 60*blockscale){//left side
 	        	iter.remove();
 	        }
@@ -190,7 +187,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			Vector3 tmp = new Vector3();
 			pipe.transform.getTranslation(tmp);
 			float x = tmp.x;
-				
+
 	        if(x >= 60*blockscale){//left side
 	        	iter2.remove();
 	        }
@@ -201,7 +198,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			Vector3 tmp = new Vector3();
 			pipe.getWorldTransform().getTranslation(tmp);
 			float x = tmp.x;
-				
+
 	        if(x >= 60*blockscale){//left side
 	        	iter3.remove();
 	        }
@@ -212,7 +209,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			Vector3 tmp = new Vector3();
 			pipe.getWorldTransform().getTranslation(tmp);
 			float x = tmp.x;
-				
+
 	        if(x >= 60*blockscale){//left side
 	        	iter4.remove();
 	        }
@@ -267,7 +264,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 				}
 				playerinstance.calculateTransforms();
 			}
-			
+
 			collision = checkCollision();
 			if(collision){
 				playerdie();
@@ -289,7 +286,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		modelBatch.end();
 		stage.draw();
 	}
-	
+
 	private void addscore(){
 		score++;
 		counter.setText(""+score);
@@ -297,7 +294,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		scoreSound.play();
 		Gdx.app.log("score ", ""+score);
 	}
-	
+
 	private void playerdie(){
 		//play sound and wait
 		dieSound.play();
@@ -356,7 +353,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
         groundShape = new btBoxShape(new Vector3(50.0f*blockscale, 0.5f*blockscale, 50.0f*blockscale));
         collisionConfig = new btDefaultCollisionConfiguration();
         dispatcher = new btCollisionDispatcher(collisionConfig);
-        
+
         //for loading models
         if(nface.getAssetManger()==null){
         	nface.setAssetManger(new  AssetManager());
@@ -369,30 +366,30 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			generator.dispose();
         	nface.getAssetManger().finishLoading();
         }
-		
+
 		spawnfloor();
 		pipemodel = nface.getAssetManger().get("models/pipe.g3db",Model.class);
 		spawnpipes(pipeinstances, toppipeinstances);
 		spawnplayer();
         groundObject = new btCollisionObject();
         groundObject.setCollisionShape(groundShape);
-        groundObject.setWorldTransform(instances.peek().transform); 
-         
+        groundObject.setWorldTransform(instances.peek().transform);
+
         ballObject = new btCollisionObject();
         ballObject.setCollisionShape(ballShape);
-        ballObject.setWorldTransform(playerinstance.transform);    
-        
+        ballObject.setWorldTransform(playerinstance.transform);
+
         //sounds
         flopSound = Gdx.audio.newSound(Gdx.files.internal("sounds/switch.wav"));
         dieSound = Gdx.audio.newSound(Gdx.files.internal("sounds/die.wav"));
         scoreSound = Gdx.audio.newSound(Gdx.files.internal("sounds/point.wav"));
-        
+
         //2d textures
         batch = new SpriteBatch();
         backgroundone = new Texture("img/backgroundonev2.png");
         backgroundtwo = new Texture("img/backgroundtwov2.png");
         bgtwox = width;
-        
+
         //stage with labels
         stage = new Stage();
         labelstyle = new LabelStyle();
@@ -401,10 +398,10 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		counter = new Label(""+score, labelstyle);
 		counter.setPosition(width/2-counter.getWidth()/2, height-height/5);
 		stage.addActor(counter);
-        
+
 		Gdx.input.setInputProcessor(this);
 	}
-	
+
 	public void spawnfloor(){
 		ModelBuilder modelBuilder = new ModelBuilder();
 		Model model;
@@ -415,7 +412,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		instance.transform.translate(blockscale*50, -20.0f, blockscale*50);
 		instances.add(instance);
 	}
-	
+
 	public void spawnCubeArray(Array<ModelInstance> cubeinstances){//not used now but has cool effect
 		for (int z = 0; z < 100; z++) {
 			for (int x = 0; x < 100; x++) {
@@ -450,13 +447,13 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 			}
 		}
 	}
-	
+
 	public void spawnplayer(){
 		model = nface.getAssetManger().get("models/bird.g3db",Model.class);
 		playerinstance = new ModelInstance(model);
 		playerinstance.transform.translate(53.0f*blockscale, 40.0f, 10.0f*blockscale);
 	}
-	
+
 	public void spawnpipes(Array<ModelInstance> pinstances, Array<ModelInstance> tinstances){
 		Random rn = new Random();
 		int random = rn.nextInt(29) + 1;
@@ -491,7 +488,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 	    pipecollisions.add(bottompipeObject);
 	    toppipecollisions.add(toppipeObject);
 	}
-	
+
 	private void jump(){
 		if(!touched)
 			touched=true;
@@ -505,56 +502,56 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		}
 	}
 
-	boolean checkCollision() {// thanks blogs.xoppa.com for bullet physics	
+	boolean checkCollision() {// thanks blogs.xoppa.com for bullet physics
 		CollisionObjectWrapper co0 = new CollisionObjectWrapper(ballObject);
 		CollisionObjectWrapper co1 = new CollisionObjectWrapper(groundObject);
-	     
+
 		btCollisionAlgorithmConstructionInfo ci = new btCollisionAlgorithmConstructionInfo();
 		ci.setDispatcher1(dispatcher);
-		btCollisionAlgorithm algorithm = new btSphereBoxCollisionAlgorithm(null, ci, co0.wrapper, co1.wrapper, false); 
- 
+		btCollisionAlgorithm algorithm = new btSphereBoxCollisionAlgorithm(null, ci, co0.wrapper, co1.wrapper, false);
+
 		btDispatcherInfo info = new btDispatcherInfo();
 		btManifoldResult result = new btManifoldResult(co0.wrapper, co1.wrapper);
-	     
+
 		algorithm.processCollision(co0.wrapper, co1.wrapper, info, result);
-	     
+
 		boolean r = result.getPersistentManifold().getNumContacts() > 0;
-	    
+
 		result.dispose();
 		info.dispose();
 		algorithm.dispose();
 		ci.dispose();
 		co1.dispose();
 		co0.dispose();
-	 
+
 	    return r;
 	}
-	
-	boolean checkCollision(btCollisionObject colObject) {// thanks blogs.xoppa.com for bullet physics	
+
+	boolean checkCollision(btCollisionObject colObject) {// thanks blogs.xoppa.com for bullet physics
 		CollisionObjectWrapper co0 = new CollisionObjectWrapper(ballObject);
 		CollisionObjectWrapper co1 = new CollisionObjectWrapper(colObject);
-	     
+
 		btCollisionAlgorithmConstructionInfo ci = new btCollisionAlgorithmConstructionInfo();
 		ci.setDispatcher1(dispatcher);
-		btCollisionAlgorithm algorithm = new btSphereBoxCollisionAlgorithm(null, ci, co0.wrapper, co1.wrapper, false); 
- 
+		btCollisionAlgorithm algorithm = new btSphereBoxCollisionAlgorithm(null, ci, co0.wrapper, co1.wrapper, false);
+
 		btDispatcherInfo info = new btDispatcherInfo();
 		btManifoldResult result = new btManifoldResult(co0.wrapper, co1.wrapper);
-	     
+
 		algorithm.processCollision(co0.wrapper, co1.wrapper, info, result);
-	     
+
 		boolean r = result.getPersistentManifold().getNumContacts() > 0;
-	    
+
 		result.dispose();
 		info.dispose();
 		algorithm.dispose();
 		ci.dispose();
 		co1.dispose();
 		co0.dispose();
-	 
+
 	    return r;
 	}
-	
+
 	@Override
 	public void hide() {
 
@@ -578,7 +575,7 @@ public class ClassicGameScreen implements Screen, InputProcessor {
 		pipemodel.dispose();
 		modelBatch.dispose();
 		groundObject.dispose();
-	    groundShape.dispose();	     
+	    groundShape.dispose();
 	    ballObject.dispose();
 	    ballShape.dispose();
 	    pipeShape.dispose();
